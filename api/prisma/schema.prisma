@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @default(uuid())
+  lineUserId  String    @unique
+  displayName String
+  pictureUrl  String?
+  role        Role      @default(STAFF)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  expenses    Expense[]
+}
+
+model Expense {
+  id              String        @id @default(uuid())
+  lineUserId      String
+  user            User          @relation(fields: [lineUserId], references: [lineUserId])
+  imageUrl        String?
+  ocrText         String?
+  amount          Int?
+  description     String?
+  category        String?
+  receiptDate     DateTime?
+  status          ExpenseStatus @default(PENDING)
+  submittedAt     DateTime?
+  approvedAt      DateTime?
+  approvedBy      String?
+  rejectedAt      DateTime?
+  rejectedBy      String?
+  rejectionReason String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+enum Role {
+  STAFF
+  HQ
+  ADMIN
+}
+
+enum ExpenseStatus {
+  PENDING
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
