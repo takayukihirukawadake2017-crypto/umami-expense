@@ -1,0 +1,9 @@
+# シークレットファイル（コミット禁止）
+.env.prod
+.env.local
+secrets/
+!secrets/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
